@@ -9,6 +9,7 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "prepare": "husky",
+    "test": "pnpm -r test",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md}\"",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,json,md}\""
   },
