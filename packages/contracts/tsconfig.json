@@ -1,0 +1,7 @@
+{
+  "extends": "@jira-lite/ts-config/base.json",
+  "compilerOptions": {
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*"]
+}
