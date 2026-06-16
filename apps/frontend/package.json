@@ -9,10 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "@jira-lite/contracts": "workspace:*",
+    "@jira-lite/database": "workspace:*",
     "next": "16.2.7",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "@jira-lite/contracts": "workspace:*"
+    "react-hook-form": "^7.78.0",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

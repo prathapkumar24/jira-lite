@@ -3,3 +3,5 @@ node_modules
 .nx/
 dist/
 build/
+.env
+jira_lite_rest_client_tests.http

@@ -1,0 +1,10 @@
+{
+  "extends": "@jira-lite/ts-config/base.json",
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts", "src/generated/zod/**/*"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true
+  }
+}

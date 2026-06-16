@@ -1,24 +1,36 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
-    "esModuleInterop": true,
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "rewriteRelativeImportExtensions": true,
     "isolatedModules": true,
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
     "declaration": true,
+    "types": [
+      "node",
+      "jest" // 👈 Tells TypeScript to globally recognize Jest testing keywords
+    ],
+    "sourceMap": true,
+    "incremental": true,
+    "skipLibCheck": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "declarationMap": true
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "**/*.spec.ts", // Matches standard NestJS spec files
+    "**/*.test.ts" // Matches standard general test files
+  ],
+  "exclude": ["node_modules", "dist"]
 }
