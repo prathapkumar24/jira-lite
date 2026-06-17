@@ -2,10 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from '../../prisma/prisma.service';
-interface JwtPayload {
-  sub: string;
-  email: string;
-}
+import { JwtPayload } from '../../interfaces/auth-backend.schema';
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private prisma: PrismaService) {
@@ -20,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * Passport core strategy hook. Executes automatically for any request passing through
    * JwtAuthGuard. Validates the user and enforces the active status policy.
    */
-  async validate(payload: JwtPayload) {
+  async validate(payload: { sub: JwtPayload['id'] }) {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
     });

@@ -1,15 +1,8 @@
 import { createZodDto } from 'nestjs-zod';
-import { UserSchema } from '@jira-lite/database/schemas';
+import { registerInputSchema, loginInputSchema } from '@jira-lite/contracts';
 import { z } from 'zod';
 // Build registration rules directly from the Database User Schema
-const registerValidationSchema = UserSchema.omit({
-  id: true,
-  role: true,
-  isActive: true,
-  createdAt: true,
-  updatedAt: true,
-  passwordHash: true, // Swapped for password field
-}).extend({
+const registerValidationSchema = registerInputSchema.extend({
   passwordHash: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters long.' })
@@ -37,10 +30,7 @@ const registerValidationSchema = UserSchema.omit({
 });
 
 // Login schema inherits user validation constraints
-const loginValidationSchema = UserSchema.pick({
-  email: true,
-  passwordHash: true, // Swapped for password field
-}).extend({
+const loginValidationSchema = loginInputSchema.extend({
   email: z.email({ message: 'Must be a valid email structure.' }),
   passwordHash: z
     .string()

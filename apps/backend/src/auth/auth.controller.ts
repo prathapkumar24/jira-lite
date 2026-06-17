@@ -15,15 +15,18 @@ import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { GetUser } from '../common/decorators/get-user.decorator';
-import * as AuthTypes from '../interfaces/auth-user.interface';
+import * as AuthTypes from '../interfaces/auth-backend.schema';
+import { loginResponseType, registerResponseType } from '@jira-lite/contracts';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() dto: RegisterDto): Promise<Record<string, unknown>> {
-    const user: AuthTypes.UserPayload =
-      await this.authService.registerUser(dto);
+  async register(@Body() dto: RegisterDto): Promise<registerResponseType> {
+    const user = await this.authService.registerUser(dto);
     return {
       id: user.id,
       email: user.email,
@@ -40,7 +43,7 @@ export class AuthController {
   async login(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) response: Response,
-  ) {
+  ): Promise<loginResponseType> {
     const user = await this.authService.validateUserCredentials(dto);
     const accessPayload = await this.authService.generateAccessToken(user);
     const refreshToken = await this.authService.generateRefreshToken(user);
@@ -77,7 +80,7 @@ export class AuthController {
         'Refresh token is invalid, expired, or has been revoked.',
       );
     }
-    const user: AuthTypes.UserPayload =
+    const user =
       await this.authService.verifyRefreshTokenSignature(existingCookieToken);
     const accessPayload = await this.authService.generateAccessToken(user);
     const rotatedRefreshToken =
@@ -121,9 +124,10 @@ export class AuthController {
   }
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
   @HttpCode(HttpStatus.OK)
-  getProfile(@GetUser() user: AuthTypes.UserPayload): AuthTypes.UserPayload {
+  getProfile(@GetUser() user: AuthTypes.JwtPayload): AuthTypes.JwtPayload {
     return user;
   }
 }

@@ -6,28 +6,20 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-export interface ApiResponse<T> {
-  success: boolean;
-  timestamp: string;
-  meta: {
-    version: string;
-  };
-  data: T;
-}
+import { ApiResponseEnvelope } from '@jira-lite/contracts';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<
   T,
-  ApiResponse<T>
+  ApiResponseEnvelope<T>
 > {
   intercept(
     _: ExecutionContext,
     next: CallHandler<T>,
-  ): Observable<ApiResponse<T>> {
+  ): Observable<ApiResponseEnvelope<T>> {
     return next.handle().pipe(
       map(
-        (data: T): ApiResponse<T> => ({
+        (data: T): ApiResponseEnvelope<T> => ({
           success: true,
           timestamp: new Date().toISOString(),
           meta: { version: 'v1' },
