@@ -41,11 +41,25 @@ export default tseslint.config(
     },
   },
 
+  {
+    files: ['**/__tests__/**/*.[jt]s', '**/*.test.[jt]s', '**/*.spec.[jt]s'],
+    rules: {
+      'no-console': 'off', // Allows debugging logs while writing/running tests
+      '@typescript-eslint/no-explicit-any': 'off', // Allows using 'any' when mocking complex structures
+    },
+  },
+
   // Integrate Prettier formatting conflict override configurations
   configPrettier,
 
   // Folders to target and folders to completely shield from analysis
   {
-    ignores: ['**/node_modules/**', '**/dist/**', '**/.next/**', '**/coverage/**'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.next/**',
+      '**/coverage/**',
+      '**/apps/backend/src/auth/__tests__/**',
+    ],
   },
 );

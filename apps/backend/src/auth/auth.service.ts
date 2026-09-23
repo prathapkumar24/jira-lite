@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
@@ -55,22 +56,24 @@ export class AuthService {
       where: { email: dto.email },
     });
     if (!user) {
-      throw new UnauthorizedException(
-        'Invalid email credentials or password match failed.',
-      );
+      throw new UnauthorizedException({
+        errors: 'InvalidCredentials',
+        message: 'Invalid email credentials or password match failed.',
+      });
     }
     const isPasswordValid = await argon2.verify(
       user.passwordHash,
       dto.passwordHash,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException(
-        'Invalid email credentials or password match failed.',
-      );
+      throw new UnauthorizedException({
+        errors: 'InvalidCredentials',
+        message: 'Invalid email credentials or password match failed.',
+      });
     }
     // Circuit Breaker Rule
     if (!user.isActive) {
-      throw new UnauthorizedException('Your account is currently inactive.');
+      throw new ForbiddenException('Your account is currently inactive.');
     }
     return user;
   }

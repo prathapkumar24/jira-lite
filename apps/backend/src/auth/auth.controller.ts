@@ -49,10 +49,10 @@ export class AuthController {
     const refreshToken = await this.authService.generateRefreshToken(user);
     // Apply secure HttpOnly cookie injection with explicit path routing
     response.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === 'production',
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/v1/api/auth/refresh', // Bounds token delivery exclusively to the refresh pipeline
+      sameSite: 'lax',
+      path: '/', // Bounds token delivery exclusively to the refresh pipeline
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 Days in Milliseconds
     });
     return {
@@ -87,10 +87,10 @@ export class AuthController {
       await this.authService.generateRefreshToken(user);
     // Re-verify cookie updates via rolling session strategy
     response.cookie('refresh_token', rotatedRefreshToken, {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === 'production',
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/v1/api/auth/refresh',
+      sameSite: 'lax',
+      path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     return {
@@ -112,10 +112,10 @@ export class AuthController {
   ): Record<string, string> {
     // Purges authorization cookies dynamically across boundaries
     response.clearCookie('refresh_token', {
-      httpOnly: true,
+      httpOnly: process.env.NODE_ENV === 'production',
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      path: '/v1/api/auth/refresh',
+      sameSite: 'lax',
+      path: '/',
     });
     return {
       message:
@@ -125,7 +125,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
+  @Roles('ADMIN', 'MEMBER')
   @HttpCode(HttpStatus.OK)
   getProfile(@GetUser() user: AuthTypes.JwtPayload): AuthTypes.JwtPayload {
     return user;

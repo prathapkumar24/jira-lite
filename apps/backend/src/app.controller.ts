@@ -10,8 +10,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('projects')
+  /*@Get('projects')
   async getProjects() {
     return this.appService.getProjects();
-  }
+  }*/
 }

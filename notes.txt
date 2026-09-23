@@ -1,0 +1,27 @@
+Run backend
+################
+pnpm turbo run dev --filter=@jira-lite/backend
+
+Run frontend
+################
+pnpm turbo run dev --filter=@jira-lite/frontend
+
+Run Whole app
+################
+npx turbo run dev
+
+Generate Folder
+################
+mkdir src/app/'(auth)'/login
+mkdir src/components, tests/unit, docs/api
+
+Generate File
+################
+ni src/app/'(auth)'/login/page.tsx 
+ni src/index.js, tests/app.test.js, docs/README.md -Type File
+
+
+mkdir apps/frontend/src/app/'(auth)'/register
+ni apps/frontend/src/app/projects/'[projectId]'/page.tsx
+
+mkdir apps/frontend/src/app/projects/[projectId]

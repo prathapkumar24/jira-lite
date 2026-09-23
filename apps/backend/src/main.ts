@@ -14,8 +14,11 @@ async function bootstrap() {
     logger: ['error', 'warn'],
   });
 
+  // Inject Cookie Parser Middleware
+  app.use(cookieParser());
+
   // Set Global Routing Prefix
-  app.setGlobalPrefix('v1/api');
+  app.setGlobalPrefix('api/v1');
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new ResponseInterceptor());
@@ -28,16 +31,13 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  // Inject Cookie Parser Middleware
-  app.use(cookieParser());
-
   // Bind Global NestJS Pipe configured with nestjs-zod class-validation mappings
   app.useGlobalPipes(new ZodValidationPipe());
 
-  const port = process.env.PORT || 3000;
-  await app.listen(process.env.PORT ?? 3000);
+  const port = process.env.PORT || 3001;
+  await app.listen(process.env.PORT ?? 3001);
   logger.log(
-    `NestJS Security Service running on: http://localhost:${port}/v1/api`,
+    `NestJS Security Service running on: http://localhost:${port}/api/v1`,
   );
 }
 void bootstrap();
